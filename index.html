@@ -95,14 +95,17 @@
         if (currentHearts > 0) {
             currentHearts -= 1;
             heartElements[currentHearts].classList.add('grey');
+            saveState();
         }
         if (currentHearts === 0) {
             currentHealthPercentage = 0;
             updateHealth();
+            saveState();
             setTimeout(() => {
                 currentHearts = 5;
                 removeGreyFilm(); // Remove grey film from all hearts
                 // Keep the health bar at 0%
+                saveState();
             }, 500); // Optional delay before resetting hearts
         }
     }
@@ -111,7 +114,35 @@
         if (currentHealthPercentage < 100) {
             currentHealthPercentage += 10;
             updateHealth();
+            saveState();
         }
+    }
+
+    function saveState() {
+        localStorage.setItem('currentHearts', currentHearts);
+        localStorage.setItem('currentHealthPercentage', currentHealthPercentage);
+    }
+
+    function loadState() {
+        const savedHearts = localStorage.getItem('currentHearts');
+        const savedHealthPercentage = localStorage.getItem('currentHealthPercentage');
+        if (savedHearts !== null) {
+            currentHearts = parseInt(savedHearts, 10);
+        }
+        if (savedHealthPercentage !== null) {
+            currentHealthPercentage = parseInt(savedHealthPercentage, 10);
+        }
+    }
+
+    function applyState() {
+        for (let i = 0; i < heartElements.length; i++) {
+            if (i < currentHearts) {
+                heartElements[i].classList.remove('grey');
+            } else {
+                heartElements[i].classList.add('grey');
+            }
+        }
+        updateHealth();
     }
 
     // Function to parse query parameters
@@ -125,19 +156,17 @@
         const params = getQueryParams();
         const func = params.get('func');
 
-        if (func === '1') {
+        if (func === '-1') {
             decreaseHeart();
-        } else if (func === '2') {
+        } else if (func === '+1') {
             increaseHealth();
         }
     }
 
     // Initialize health bar and hearts
     function initialize() {
-        currentHearts = 5;
-        currentHealthPercentage = 0;
-        removeGreyFilm(); // Ensure all hearts are red initially
-        updateHealth(); // Initialize the health bar
+        loadState();
+        applyState();
     }
 
     // Initialize and execute the function based on URL parameters when the page loads
@@ -149,5 +178,6 @@
 
 </body>
 </html>
+
 
 
