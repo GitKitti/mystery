@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Bar with Hearts</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: white;
+            margin: 0;
+        }
+        .hearts {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .heart img {
+            width: 35px;
+            height: 35px;
+        }
+        .heart.grey img {
+            filter: grayscale(75%);
+        }
+        .health-bar {
+            width: 200px;
+            height: 20px;
+            background-color: red;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .health {
+            height: 100%;
+            background-color: green;
+            transition: width 0.5s;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="hearts" id="hearts">
+    <div class="heart"><img src="./images/heart.png" alt="Heart">&nbsp;</div>
+    <div class="heart"><img src="./images/heart.png" alt="Heart">&nbsp;</div>
+    <div class="heart"><img src="./images/heart.png" alt="Heart">&nbsp;</div>
+    <div class="heart"><img src="./images/heart.png" alt="Heart">&nbsp;</div>
+    <div class="heart"><img src="./images/heart.png" alt="Heart"></div>
+</div>
+<div class="health-bar">
+    <div class="health" id="health"></div>
+</div>
+<button onclick="decreaseHeart()">Decrease Heart</button>
+
+<script>
+    let currentHearts = 5;
+    const healthBar = document.getElementById('health');
+    const heartsContainer = document.getElementById('hearts');
+    const heartElements = heartsContainer.children;
+
+    function updateHealth() {
+        const healthPercentage = (currentHearts / 5) * 100;
+        healthBar.style.width = healthPercentage + '%';
+    }
+
+    function decreaseHeart() {
+        if (currentHearts > 0) {
+            currentHearts -= 1;
+            heartElements[currentHearts].classList.add('grey');
+        }
+        if (currentHearts === 0) {
+            updateHealth();
+        }
+    }
+
+    // Initialize health bar and hearts
+    function initialize() {
+        currentHearts = 5;
+        updateHealth();
+    }
+
+    initialize();
+</script>
+
+</body>
+</html>
