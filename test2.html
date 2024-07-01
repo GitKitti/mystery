@@ -38,17 +38,27 @@
             transition: width 0.5s;
         }
         button {
-            padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
+            border: none;
+            padding: 0;
+            background: none;
         }
+        #minus {
+            width: 40px;
+            height: 40px;
+        }
+        #plus {
+            width: 40px;
+            height: 40px;
+        }
+        
     </style>
 </head>
 <body>
 
 
 <div class="hearts" id="hearts">
-    <button onclick="decreaseHeart()">Decrease Heart</button> &nbsp;
     <div class="heart"><img src="./images/heart.png" alt="Heart">&nbsp;</div>
     <div class="heart"><img src="./images/heart.png" alt="Heart">&nbsp;</div>
     <div class="heart"><img src="./images/heart.png" alt="Heart">&nbsp;</div>
@@ -58,16 +68,20 @@
 <div class="health-bar">
     <div class="health" id="health"></div>
 </div>
+<button onclick="decreaseHeart()"><img src="./images/minus.png" alt="" id="minus"></button>
+<button onclick=""><img src="./images/plus.png" alt="" id="plus"></button>
+
 
 <script>
     let currentHearts = 5;
     const healthBar = document.getElementById('health');
     const heartsContainer = document.getElementById('hearts');
-    const heartElements = heartsContainer.children;
+    const heartElements = heartsContainer.getElementsByClassName('heart');
 
     function updateHealth() {
-        const healthPercentage = (currentHearts / 5) * 100;
-        healthBar.style.width = healthPercentage + '%';
+        if (currentHearts === 0) {
+            healthBar.style.width = '0%';
+        }
     }
 
     function removeGreyFilm() {
@@ -83,14 +97,19 @@
         }
         if (currentHearts === 0) {
             updateHealth();
-            removeGreyFilm(); // Remove grey film from all hearts
+            setTimeout(() => {
+                currentHearts = 5;
+                removeGreyFilm(); // Remove grey film from all hearts
+                // Do not reset health bar
+            }, 500); // Optional delay before resetting
         }
     }
 
     // Initialize health bar and hearts
     function initialize() {
         currentHearts = 5;
-        updateHealth();
+        removeGreyFilm(); // Ensure all hearts are red initially
+        healthBar.style.width = '0%'; // Set health bar to full initially
     }
 
     initialize();
@@ -98,3 +117,4 @@
 
 </body>
 </html>
+
