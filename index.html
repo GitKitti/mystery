@@ -114,6 +114,24 @@
         }
     }
 
+    // Function to parse query parameters
+    function getQueryParams() {
+        const params = new URLSearchParams(window.location.search);
+        return params;
+    }
+
+    // Execute the function based on URL parameters
+    function executeFunctionBasedOnParams() {
+        const params = getQueryParams();
+        const func = params.get('func');
+
+        if (func === '-1') {
+            decreaseHeart();
+        } else if (func === '+1') {
+            increaseHealth();
+        }
+    }
+
     // Initialize health bar and hearts
     function initialize() {
         currentHearts = 5;
@@ -122,7 +140,11 @@
         updateHealth(); // Initialize the health bar
     }
 
-    initialize();
+    // Initialize and execute the function based on URL parameters when the page loads
+    window.onload = function() {
+        initialize();
+        executeFunctionBasedOnParams();
+    };
 </script>
 
 </body>
